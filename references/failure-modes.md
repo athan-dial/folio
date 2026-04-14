@@ -96,6 +96,39 @@
 
 ---
 
+### Gate IP: Redline Safety
+**Trigger**: `scan_redlines.py` flags content against `ip_policy.json`.
+
+**Symptoms**:
+- Forbidden terms in draft
+
+**Repair**:
+- Redact terms, add to exceptions, or remove content
+
+---
+
+### Gate H: Hostile Review
+**Trigger**: During white paper or hybrid review.
+
+**Symptoms**:
+- Critical external-readiness issues
+
+**Repair**:
+- Address logical gaps, soften claims, add disclaimers
+
+---
+
+### Routing Confidence
+**Trigger**: `route_mode.py` reports confidence below 0.5.
+
+**Symptoms**:
+- Ambiguous materials mix
+
+**Repair**:
+- User manually selects mode via override
+
+---
+
 ## Common Problems
 
 ### "pdflatex not found"

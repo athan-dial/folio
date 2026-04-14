@@ -18,6 +18,7 @@ WORKSPACE_DIRS = [
     "final/figures",
     "final/tables",
     "logs",
+    "exports",
 ]
 
 SEED_FILES = {
@@ -26,6 +27,41 @@ SEED_FILES = {
     "inputs/venue_profile.md": "# Venue Profile\n\n<!-- Fill in or let the prep stage synthesize this -->\n",
     "inputs/materials_manifest.json": json.dumps({"files": [], "gaps": []}, indent=2) + "\n",
     "inputs/figures_manifest.json": json.dumps({"figures": [], "planned": []}, indent=2) + "\n",
+    "inputs/materials_passport.json": json.dumps({"materials": []}, indent=2) + "\n",
+    "intent.json": json.dumps(
+        {
+            "paper_id": "",
+            "audience": "",
+            "doc_type": "",
+            "thesis": "",
+            "constraints": "",
+            "forbidden_topics": [],
+            "preferred_mode": None,
+            "output_bundle": "",
+        },
+        indent=2,
+    )
+    + "\n",
+    "ip_policy.json": json.dumps(
+        {
+            "forbidden_terms": [],
+            "code_names": [],
+            "sensitive_metric_patterns": [],
+            "redline_exceptions": [],
+        },
+        indent=2,
+    )
+    + "\n",
+    "route.json": json.dumps(
+        {
+            "selected_mode": "",
+            "confidence": 0.0,
+            "reasons": [],
+            "user_override": None,
+        },
+        indent=2,
+    )
+    + "\n",
     "logs/checkpoints.md": "# Checkpoints\n\n| Stage | Status | Timestamp |\n|-------|--------|-----------|\n",
 }
 

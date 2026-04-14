@@ -13,7 +13,7 @@
         "properties": {
           "id": { "type": "string", "pattern": "^C\\d+$" },
           "statement": { "type": "string" },
-          "type": { "type": "string", "enum": ["quantitative", "qualitative", "methodological"] },
+          "type": { "type": "string", "enum": ["quantitative", "qualitative", "methodological", "fact", "interpretation", "opinion", "forecast"] },
           "evidence_source": { "type": "string" },
           "support_level": { "type": "string", "enum": ["strong", "moderate", "weak", "unsupported"] },
           "depends_on_figures": { "type": "array", "items": { "type": "string" } },

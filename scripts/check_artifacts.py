@@ -9,17 +9,75 @@ from pathlib import Path
 
 def validate_artifacts(workspace_path: str) -> bool:
     root = Path(workspace_path)
-    draft_path = root / "drafts" / "paper.tex"
-    bib_path = root / "citations" / "refs.bib"
-    captions_path = root / "figures" / "captions.json"
     errors: list[str] = []
     warnings: list[str] = []
 
-    if not draft_path.exists():
+    mode = "data_paper"
+    route_path = root / "route.json"
+    if route_path.exists():
+        try:
+            route_data = json.loads(route_path.read_text())
+            mode = route_data.get("selected_mode", "data_paper")
+        except (json.JSONDecodeError, OSError):
+            mode = "data_paper"
+
+    if not (root / "reviews" / "ip_safety_report.md").exists():
+        warnings.append(
+            "reviews/ip_safety_report.md not found (may not exist yet during drafting)"
+        )
+
+    bib_path = root / "citations" / "refs.bib"
+    captions_path = root / "figures" / "captions.json"
+
+    if mode == "white_paper":
+        draft_path = root / "drafts" / "paper.md"
+        if not draft_path.exists():
+            print("ERROR: drafts/paper.md not found", file=sys.stderr)
+            return False
+
+        if captions_path.exists():
+            try:
+                captions_data = json.loads(captions_path.read_text())
+                for cap in captions_data.get("captions", []):
+                    fig_path = cap.get("path", "")
+                    if fig_path and not (root / fig_path).exists():
+                        if cap.get("exists", True):
+                            errors.append(f"Figure file missing: {fig_path}")
+            except json.JSONDecodeError:
+                errors.append("captions.json is invalid JSON")
+
+        if warnings:
+            print("WARNINGS:")
+            for w in warnings:
+                print(f"  - {w}")
+
+        if errors:
+            print("ERRORS:")
+            for e in errors:
+                print(f"  - {e}")
+            print(f"\nGates E/F FAILED: {len(errors)} artifact/rendering error(s)")
+            return False
+
+        print("Gates E/F PASSED: White paper draft and figure artifacts validated")
+        if warnings:
+            print(f"  ({len(warnings)} warning(s))")
+        return True
+
+    if mode == "hybrid":
+        md_path = root / "drafts" / "paper.md"
+        tex_exists = (root / "drafts" / "paper.tex").exists()
+        if tex_exists and md_path.exists():
+            if not md_path.read_text().strip():
+                errors.append("drafts/paper.md is empty (hybrid mode)")
+        elif tex_exists and not md_path.exists():
+            warnings.append("drafts/paper.md not found (hybrid mode)")
+
+    tex_path = root / "drafts" / "paper.tex"
+    if not tex_path.exists():
         print("ERROR: drafts/paper.tex not found", file=sys.stderr)
         return False
 
-    draft = draft_path.read_text()
+    draft = tex_path.read_text()
 
     # --- Gate E: Artifact integrity ---
 
@@ -40,7 +98,9 @@ def validate_artifacts(workspace_path: str) -> bool:
             fig_refs = set(re.findall(r"\\ref\{fig:(\w+)\}", draft))
             for ref in fig_refs:
                 if ref not in known_figures:
-                    errors.append(f"\\ref{{fig:{ref}}} in draft but no matching figure in captions.json")
+                    errors.append(
+                        f"\\ref{{fig:{ref}}} in draft but no matching figure in captions.json"
+                    )
 
         except json.JSONDecodeError:
             errors.append("captions.json is invalid JSON")

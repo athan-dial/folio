@@ -15,6 +15,16 @@ PaperOrchestra runs an end-to-end paper-writing workflow inside Claude Code:
 
 Human checkpoints pause the workflow after prep, after planning, and before final export.
 
+## Modes
+
+PaperOrchestra branches into three modes after prep and routing:
+
+- **White paper** — Perspectives-driven narrative, Markdown-first draft, executive-oriented export.
+- **Data paper** — Planning and evidence support, LaTeX draft, traditional finalize and package.
+- **Hybrid** — Conceptual framing plus evidence support, merged draft, dual review, combined export.
+
+`route_mode.py` recommends a mode from your materials; you confirm or override at the routing checkpoint.
+
 ## Install
 
 Copy this repo into your Claude Code skills directory:
@@ -41,7 +51,7 @@ Then invoke with `/paper-orchestra` in Claude Code.
 - **idea** — A sentence or paragraph describing the paper's core contribution
 - **materials_path** — Path to a folder containing research materials (notes, data, figures, PDFs)
 
-Both are optional. The skill will prompt for missing information interactively.
+Both are optional. The skill will prompt for missing information interactively. After prep, say which mode you want (white paper, data paper, or hybrid) if the default routing does not match your intent.
 
 ## Requirements
 

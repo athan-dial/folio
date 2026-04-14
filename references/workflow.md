@@ -2,20 +2,51 @@
 
 ## Stages Overview
 
-| # | Stage | Key Artifacts | Gate | Checkpoint |
-|---|-------|---------------|------|------------|
-| 0 | Initialize | workspace/ | — | — |
-| 1 | Prep | idea.md, experimental_log.md, manifests | A: Input completeness | After prep |
-| 2 | Plan | outline.json, claim_ledger.json, figure_plan.json, literature_plan.json | B: Plan completeness | After plan |
-| 3 | Support | citation_pool.json, refs.bib, figures/, captions.json | C: Evidence, D: Citation, E: Artifact | — |
-| 4 | Draft | drafts/paper.tex | F: Rendering | — |
-| 5 | Review | reviews/, scorecard.json | G: Refinement | — |
-| 6 | Finalize | final/paper.tex, paper.pdf, submission_bundle.zip | — | Before export |
+| Stage | All Modes | White Paper | Data Paper | Hybrid |
+|-------|-----------|-------------|------------|--------|
+| 0 | Initialize | | | |
+| 1 | Prep + Route | | | |
+| - | Routing Checkpoint | | | |
+| 2 | | W2: Perspectives | D2: Planning | H2: Conceptual Framing |
+| 3 | | W3: Argument | D3: Support | H3: Evidence Support |
+| 4 | | W4: Draft (.md) | D4: Draft (.tex) | H4: Merged Draft |
+| 5 | | W5: Review+IP | D5: Review+IP | H5: Dual Review |
+| 6 | | W6: Executive | D6: Finalize | H6: Combined Export |
+| Exit | Package + Export | | | |
+
+## Mode routing diagram
+
+After prep, `classify_materials.py` and `route_mode.py` produce a recommended mode (white paper, data paper, or hybrid). The routing checkpoint confirms or overrides that choice before mode-specific stages run.
+
+```mermaid
+flowchart TD
+  S0[Stage 0: Initialize]
+  S1[Stage 1: Prep + Route]
+  RC[Routing Checkpoint]
+  WP[White Paper branch]
+  DP[Data Paper branch]
+  HY[Hybrid branch]
+  EX[Exit: Package + Export]
+
+  S0 --> S1 --> RC
+  RC --> WP
+  RC --> DP
+  RC --> HY
+  WP --> EX
+  DP --> EX
+  HY --> EX
+```
+
+Low-confidence routing (see failure modes) may require an explicit user override before continuing on a branch.
 
 ## Workspace Layout
 
 ```
 workspace/
+  intent.json            ← Declared goals and constraints for the run
+  route.json             ← Mode routing decision and confidence (from route_mode.py)
+  ip_policy.json         ← IP/redline rules for scan_redlines.py
+  materials_passport.json ← Classified materials summary (from classify_materials.py)
   inputs/
     raw_materials/       ← User's source files
     idea.md              ← Core contribution and research questions
@@ -30,6 +61,8 @@ workspace/
     literature_plan.json ← Search queries and coverage areas
     claim_ledger.json    ← Claims mapped to evidence
     results_inventory.json
+    perspectives.json    ← Stakeholder / framing perspectives (mode-specific)
+    question_tree.json   ← Structured questions driving the argument
   citations/
     citation_pool.json   ← Verified citation metadata
     refs.bib             ← BibTeX bibliography
@@ -41,10 +74,12 @@ workspace/
     generated/           ← Table LaTeX snippets
   drafts/
     paper.tex            ← Working draft
+    argument_graph.md    ← Argument structure (links claims and narrative)
     sections/            ← Optional section intermediates
   reviews/
     review_round_N.md    ← Review notes per round
     scorecard.json       ← Quality scores
+  exports/               ← Packaged outputs (see package_exports.py)
   final/
     paper.tex            ← Final manuscript
     paper.pdf            ← Compiled PDF

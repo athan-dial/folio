@@ -25,11 +25,31 @@ def validate_inputs(workspace_path: str) -> bool:
         print(f"ERROR: Workspace not found at {root}", file=sys.stderr)
         return False
 
+    route_path = root / "route.json"
+    selected_mode = None
+    if route_path.exists():
+        try:
+            route_data = json.loads(route_path.read_text())
+            selected_mode = route_data.get("selected_mode")
+        except json.JSONDecodeError:
+            selected_mode = None
+
+    if route_path.exists():
+        for rel_path, description in (
+            ("intent.json", "Intent manifest"),
+            ("inputs/materials_passport.json", "Materials passport"),
+        ):
+            if not (root / rel_path).exists():
+                errors.append(f"MISSING: {rel_path} ({description})")
+
     # Check required files exist
     for rel_path, description in REQUIRED_FILES.items():
         target = root / rel_path
         if not target.exists():
-            errors.append(f"MISSING: {rel_path} ({description})")
+            if rel_path == "inputs/experimental_log.md" and selected_mode == "white_paper":
+                warnings.append(f"MISSING: {rel_path} ({description}) — optional in white_paper mode")
+            else:
+                errors.append(f"MISSING: {rel_path} ({description})")
             continue
 
         content = target.read_text().strip()
@@ -46,7 +66,10 @@ def validate_inputs(workspace_path: str) -> bool:
             warnings.append(f"GAPS: {rel_path} has {gap_count} unresolved gap(s)")
 
     # Validate JSON files parse correctly
-    for json_file in ["inputs/materials_manifest.json", "inputs/figures_manifest.json"]:
+    json_files = ["inputs/materials_manifest.json", "inputs/figures_manifest.json"]
+    if route_path.exists():
+        json_files.extend(["intent.json", "inputs/materials_passport.json"])
+    for json_file in json_files:
         target = root / json_file
         if target.exists():
             try:

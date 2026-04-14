@@ -11,6 +11,10 @@ scripts/              — Deterministic helper scripts (Python + shell)
 templates/            — Workspace layout templates and manifest schemas
 ```
 
+Workflow scripts include `classify_materials.py` (materials typing), `route_mode.py` (mode selection and confidence), `scan_redlines.py` (IP/redline checks against `ip_policy.json`), and `package_exports.py` (export bundles).
+
+The skill supports three modes: **white paper** (narrative / positioning), **data paper** (empirical / LaTeX-forward), and **hybrid** (combined framing and evidence). Mode follows routing after prep; users can override when routing is ambiguous.
+
 ## Conventions
 
 - All workflow state lives in a `workspace/` directory created per project.

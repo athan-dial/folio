@@ -5,6 +5,18 @@ import json
 import sys
 from pathlib import Path
 
+RECOGNIZED_CLAIM_TYPES = frozenset(
+    {
+        "quantitative",
+        "qualitative",
+        "methodological",
+        "fact",
+        "interpretation",
+        "opinion",
+        "forecast",
+    }
+)
+
 
 def validate_claim_ledger(workspace_path: str) -> bool:
     root = Path(workspace_path)
@@ -36,15 +48,24 @@ def validate_claim_ledger(workspace_path: str) -> bool:
         if not statement:
             errors.append(f"{cid}: Empty claim statement")
 
+        if ctype == "interpretation" and support in ("weak", "unsupported"):
+            errors.append(f"{cid}: Interpretation claim requires at least moderate support")
+
         if support == "unsupported":
-            errors.append(f"{cid}: Claim is unsupported — must resolve or remove before drafting")
+            if ctype != "interpretation":
+                errors.append(f"{cid}: Claim is unsupported — must resolve or remove before drafting")
         elif support == "weak":
-            warnings.append(f"{cid}: Weak support — consider softening language in draft")
-        elif support not in ("strong", "moderate"):
+            if ctype not in ("opinion", "forecast", "interpretation"):
+                warnings.append(f"{cid}: Weak support — consider softening language in draft")
+        elif support not in ("strong", "moderate", "weak", "unsupported"):
             warnings.append(f"{cid}: Unrecognized support level '{support}'")
 
-        if ctype == "quantitative" and not evidence:
-            errors.append(f"{cid}: Quantitative claim has no evidence_source trace")
+        if ctype and ctype not in RECOGNIZED_CLAIM_TYPES:
+            warnings.append(f"{cid}: Unrecognized claim type '{ctype}'")
+
+        if ctype in ("quantitative", "fact") and not evidence:
+            label = "Quantitative" if ctype == "quantitative" else "Fact"
+            errors.append(f"{cid}: {label} claim has no evidence_source trace")
 
     # Report
     if warnings:

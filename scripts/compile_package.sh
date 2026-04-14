@@ -6,6 +6,17 @@ set -euo pipefail
 WORKSPACE="${1:?Usage: compile_package.sh <workspace_path>}"
 FINAL_DIR="$WORKSPACE/final"
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+MODE=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['selected_mode'])" "$WORKSPACE/route.json" 2>/dev/null || echo 'data_paper')
+
+if [ "$MODE" = "white_paper" ]; then
+    python3 "$REPO_ROOT/scripts/package_exports.py" "$WORKSPACE"
+    echo "OK: White paper package assembled (no LaTeX compilation needed)"
+    exit 0
+fi
+
 # Verify final/paper.tex exists
 if [ ! -f "$FINAL_DIR/paper.tex" ]; then
     echo "ERROR: $FINAL_DIR/paper.tex not found" >&2
@@ -64,3 +75,9 @@ zip -r submission_bundle.zip $BUNDLE_FILES 2>/dev/null || {
 }
 
 echo "OK: Submission bundle at $FINAL_DIR/submission_bundle.zip"
+
+if [ "$MODE" = "hybrid" ]; then
+    python3 "$REPO_ROOT/scripts/package_exports.py" "$WORKSPACE"
+else
+    python3 "$REPO_ROOT/scripts/package_exports.py" "$WORKSPACE" 2>/dev/null || true
+fi
