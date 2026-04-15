@@ -9,7 +9,7 @@
     "audience": { "type": "string" },
     "doc_type": {
       "type": "string",
-      "enum": ["white_paper", "data_paper", "hybrid"]
+      "enum": ["white_paper", "research_paper", "hybrid"]
     },
     "thesis": { "type": "string" },
     "constraints": { "type": "string" },
@@ -23,7 +23,7 @@
         { "type": "null" },
         {
           "type": "string",
-          "enum": ["white_paper", "data_paper", "hybrid"]
+          "enum": ["white_paper", "research_paper", "hybrid"]
         }
       ]
     },

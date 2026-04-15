@@ -24,3 +24,5 @@ Thumbs.db
 
 # Workspace outputs (generated per-project, not committed)
 workspace/
+site/docs/
+docs/site/

@@ -23,30 +23,32 @@ sudo apt-get install texlive-full
 ### Option A: Clone and symlink
 
 ```bash
-git clone https://github.com/athan-dial/paperorchestra.git
-ln -s "$(pwd)/paperorchestra" ~/.claude/skills/paper-orchestra
+git clone https://github.com/athan-dial/folio.git
+ln -s "$(pwd)/folio" ~/.claude/skills/folio
 ```
 
 ### Option B: Copy into skills directory
 
 ```bash
-git clone https://github.com/athan-dial/paperorchestra.git
-cp -r paperorchestra ~/.claude/skills/paper-orchestra
+git clone https://github.com/athan-dial/folio.git
+cp -r folio ~/.claude/skills/folio
 ```
 
 ## Verify Installation
 
 In Claude Code, run:
 ```
-/paper-orchestra
+/folio
 ```
 
 The skill should prompt for your paper idea and materials path.
 
+All sub-commands (`/folio:init`, `/folio:prep`, `/folio:plan`, `/folio:support`, `/folio:draft`, `/folio:review`, `/folio:export`, `/folio:status`) are auto-discovered from the `skills/` directory and become available as soon as the skill pack is installed.
+
 ## Updating
 
 ```bash
-cd /path/to/paperorchestra
+cd /path/to/folio
 git pull
 ```
 

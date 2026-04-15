@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate canonical inputs in a PaperOrchestra workspace (Gate A)."""
+"""Validate canonical inputs in a Folio workspace (Gate A)."""
 
 import json
 import sys

@@ -2,7 +2,7 @@
 
 ## Stages Overview
 
-| Stage | All Modes | White Paper | Data Paper | Hybrid |
+| Stage | All Modes | White Paper | Research Paper | Hybrid |
 |-------|-----------|-------------|------------|--------|
 | 0 | Initialize | | | |
 | 1 | Prep + Route | | | |
@@ -16,7 +16,7 @@
 
 ## Mode routing diagram
 
-After prep, `classify_materials.py` and `route_mode.py` produce a recommended mode (white paper, data paper, or hybrid). The routing checkpoint confirms or overrides that choice before mode-specific stages run.
+After prep, `classify_materials.py` and `route_mode.py` produce a recommended mode (white paper, research paper, or hybrid). The routing checkpoint confirms or overrides that choice before mode-specific stages run.
 
 ```mermaid
 flowchart TD
@@ -24,7 +24,7 @@ flowchart TD
   S1[Stage 1: Prep + Route]
   RC[Routing Checkpoint]
   WP[White Paper branch]
-  DP[Data Paper branch]
+  DP[Research Paper branch]
   HY[Hybrid branch]
   EX[Exit: Package + Export]
 
@@ -93,7 +93,7 @@ workspace/
 
 ## Resuming Work
 
-Re-invoke `/paper-orchestra` on an existing workspace. The skill reads `logs/checkpoints.md` to detect the last completed stage and offers to resume from the next one.
+Re-invoke `/folio` on an existing workspace. The skill reads `logs/checkpoints.md` to detect the last completed stage and offers to resume from the next one.
 
 You can also request a specific stage re-run: "Re-run the review stage on this workspace."
 

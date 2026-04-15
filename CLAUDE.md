@@ -1,4 +1,4 @@
-# PaperOrchestra
+# Folio
 
 Claude Code skill pack for end-to-end research paper orchestration.
 
@@ -6,14 +6,16 @@ Claude Code skill pack for end-to-end research paper orchestration.
 
 ```
 SKILL.md              — Main skill entry point (Claude Code loads this)
+skills/               — Sub-skill SKILL.md files (init, prep, plan, support, draft, review, export, status)
 references/           — Install, workflow, and failure-mode docs
+references/modes/     — Mode-specific guidance (white-paper, research-paper, hybrid)
 scripts/              — Deterministic helper scripts (Python + shell)
 templates/            — Workspace layout templates and manifest schemas
 ```
 
 Workflow scripts include `classify_materials.py` (materials typing), `route_mode.py` (mode selection and confidence), `scan_redlines.py` (IP/redline checks against `ip_policy.json`), and `package_exports.py` (export bundles).
 
-The skill supports three modes: **white paper** (narrative / positioning), **data paper** (empirical / LaTeX-forward), and **hybrid** (combined framing and evidence). Mode follows routing after prep; users can override when routing is ambiguous.
+The skill supports three modes: **white paper** (narrative / positioning), **research paper** (empirical / LaTeX-forward), and **hybrid** (combined framing and evidence). Mode follows routing after prep; users can override when routing is ambiguous.
 
 ## Conventions
 

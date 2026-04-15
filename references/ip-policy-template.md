@@ -7,7 +7,7 @@ Use this shape when authoring `ip_policy.json` for a workspace. Values are examp
   "forbidden_terms": ["Project Chimera", "internal-metric-xyz"],
   "code_names": ["Chimera", "Phoenix"],
   "sensitive_metric_patterns": ["\\d+\\.\\d+% improvement over internal"],
-  "redline_exceptions": ["PaperOrchestra"]
+  "redline_exceptions": ["Folio"]
 }
 ```
 

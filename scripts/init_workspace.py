@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Initialize a PaperOrchestra workspace with canonical directory structure."""
+"""Initialize a Folio workspace with canonical directory structure."""
 
 import json
 import sys

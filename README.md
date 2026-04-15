@@ -1,10 +1,10 @@
-# PaperOrchestra
+# Folio
 
 A Claude Code skill pack that converts research ideas and messy materials into validated, reviewable, exportable manuscripts through artifact-driven orchestration.
 
 ## What it does
 
-PaperOrchestra runs an end-to-end paper-writing workflow inside Claude Code:
+Folio runs an end-to-end paper-writing workflow inside Claude Code:
 
 1. **Prep** — Normalizes loose notes, PDFs, figures, and experiment results into canonical artifacts
 2. **Plan** — Generates an outline, claim ledger, figure plan, and literature plan
@@ -17,10 +17,10 @@ Human checkpoints pause the workflow after prep, after planning, and before fina
 
 ## Modes
 
-PaperOrchestra branches into three modes after prep and routing:
+Folio branches into three modes after prep and routing:
 
 - **White paper** — Perspectives-driven narrative, Markdown-first draft, executive-oriented export.
-- **Data paper** — Planning and evidence support, LaTeX draft, traditional finalize and package.
+- **Research paper** — Planning and evidence support, LaTeX draft, traditional finalize and package.
 - **Hybrid** — Conceptual framing plus evidence support, merged draft, dual review, combined export.
 
 `route_mode.py` recommends a mode from your materials; you confirm or override at the routing checkpoint.
@@ -31,27 +31,27 @@ Copy this repo into your Claude Code skills directory:
 
 ```bash
 # From your Claude Code config directory
-cp -r /path/to/paperorchestra ~/.claude/skills/paper-orchestra
+cp -r /path/to/folio ~/.claude/skills/folio
 ```
 
 Or symlink it:
 
 ```bash
-ln -s /path/to/paperorchestra ~/.claude/skills/paper-orchestra
+ln -s /path/to/folio ~/.claude/skills/folio
 ```
 
-Then invoke with `/paper-orchestra` in Claude Code.
+Then invoke with `/folio` in Claude Code.
 
 ## Usage
 
 ```
-/paper-orchestra [idea] [materials_path]
+/folio [idea] [materials_path]
 ```
 
 - **idea** — A sentence or paragraph describing the paper's core contribution
 - **materials_path** — Path to a folder containing research materials (notes, data, figures, PDFs)
 
-Both are optional. The skill will prompt for missing information interactively. After prep, say which mode you want (white paper, data paper, or hybrid) if the default routing does not match your intent.
+Both are optional. The skill will prompt for missing information interactively. After prep, say which mode you want (white paper, research paper, or hybrid) if the default routing does not match your intent.
 
 ## Requirements
 

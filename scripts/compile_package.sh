@@ -9,7 +9,7 @@ FINAL_DIR="$WORKSPACE/final"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-MODE=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['selected_mode'])" "$WORKSPACE/route.json" 2>/dev/null || echo 'data_paper')
+MODE=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['selected_mode'])" "$WORKSPACE/route.json" 2>/dev/null || echo 'research_paper')
 
 if [ "$MODE" = "white_paper" ]; then
     python3 "$REPO_ROOT/scripts/package_exports.py" "$WORKSPACE"

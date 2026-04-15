@@ -12,14 +12,14 @@ def validate_artifacts(workspace_path: str) -> bool:
     errors: list[str] = []
     warnings: list[str] = []
 
-    mode = "data_paper"
+    mode = "research_paper"
     route_path = root / "route.json"
     if route_path.exists():
         try:
             route_data = json.loads(route_path.read_text())
-            mode = route_data.get("selected_mode", "data_paper")
+            mode = route_data.get("selected_mode", "research_paper")
         except (json.JSONDecodeError, OSError):
-            mode = "data_paper"
+            mode = "research_paper"
 
     if not (root / "reviews" / "ip_safety_report.md").exists():
         warnings.append(

@@ -7,7 +7,7 @@
   "properties": {
     "selected_mode": {
       "type": "string",
-      "enum": ["white_paper", "data_paper", "hybrid"]
+      "enum": ["white_paper", "research_paper", "hybrid"]
     },
     "confidence": {
       "type": "number",
@@ -24,7 +24,7 @@
         { "type": "null" },
         {
           "type": "string",
-          "enum": ["white_paper", "data_paper", "hybrid"]
+          "enum": ["white_paper", "research_paper", "hybrid"]
         }
       ]
     }

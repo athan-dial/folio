@@ -69,7 +69,7 @@ def _white_paper_signals(intent: dict, passport: dict, manifest_types: dict[str,
     return hits, total
 
 
-def _data_paper_signals(intent: dict, manifest_types: dict[str, str]) -> tuple[int, int]:
+def _research_paper_signals(intent: dict, manifest_types: dict[str, str]) -> tuple[int, int]:
     doc_type = str(intent.get("doc_type") or "").lower()
     thesis = str(intent.get("thesis") or "").lower()
     constraints = str(intent.get("constraints") or "").lower()
@@ -80,7 +80,7 @@ def _data_paper_signals(intent: dict, manifest_types: dict[str, str]) -> tuple[i
 
     has_research = "research" in doc_type or "manuscript" in doc_type
     has_paper = "paper" in doc_type and "white" not in doc_type
-    if has_research or doc_type == "data_paper" or has_paper:
+    if has_research or doc_type == "research_paper" or has_paper:
         hits += 1
 
     if any(t in DATA_NOTEBOOK_TYPES for t in manifest_types.values()):
@@ -132,7 +132,7 @@ def route_mode(workspace_path: str) -> int:
     manifest_types = _build_manifest_type_index(manifest)
 
     preferred = intent.get("preferred_mode")
-    if preferred in ("white_paper", "data_paper", "hybrid"):
+    if preferred in ("white_paper", "research_paper", "hybrid"):
         payload = {
             "selected_mode": preferred,
             "confidence": 0.95,
@@ -147,7 +147,7 @@ def route_mode(workspace_path: str) -> int:
         return 0
 
     wp_hits, wp_total = _white_paper_signals(intent, passport, manifest_types)
-    dp_hits, dp_total = _data_paper_signals(intent, manifest_types)
+    dp_hits, dp_total = _research_paper_signals(intent, manifest_types)
 
     wp_score = wp_hits / wp_total if wp_total else 0.0
     dp_score = dp_hits / dp_total if dp_total else 0.0
@@ -161,7 +161,7 @@ def route_mode(workspace_path: str) -> int:
 
     modes = [
         ("white_paper", wp_score),
-        ("data_paper", dp_score),
+        ("research_paper", dp_score),
         ("hybrid", hy_score),
     ]
     modes.sort(key=lambda x: x[1], reverse=True)
@@ -179,7 +179,7 @@ def route_mode(workspace_path: str) -> int:
         confidence = round(margin, 2)
         reasons = [
             f"top two modes within 0.1 (margin={margin:.2f}); "
-            f"scores white_paper={wp_score:.2f}, data_paper={dp_score:.2f}, hybrid={hy_score:.2f}"
+            f"scores white_paper={wp_score:.2f}, research_paper={dp_score:.2f}, hybrid={hy_score:.2f}"
         ]
     else:
         selected = modes[0][0]
@@ -187,13 +187,13 @@ def route_mode(workspace_path: str) -> int:
         reasons = []
         if selected == "white_paper":
             reasons.append(f"white_paper signals {wp_hits}/{wp_total} (score {wp_score:.2f})")
-            reasons.append(f"data_paper signals {dp_hits}/{dp_total} (score {dp_score:.2f})")
-        elif selected == "data_paper":
-            reasons.append(f"data_paper signals {dp_hits}/{dp_total} (score {dp_score:.2f})")
+            reasons.append(f"research_paper signals {dp_hits}/{dp_total} (score {dp_score:.2f})")
+        elif selected == "research_paper":
+            reasons.append(f"research_paper signals {dp_hits}/{dp_total} (score {dp_score:.2f})")
             reasons.append(f"white_paper signals {wp_hits}/{wp_total} (score {wp_score:.2f})")
         else:
             reasons.append(
-                f"hybrid score {hy_score:.2f} (white_paper={wp_score:.2f}, data_paper={dp_score:.2f})"
+                f"hybrid score {hy_score:.2f} (white_paper={wp_score:.2f}, research_paper={dp_score:.2f})"
             )
 
     payload = {

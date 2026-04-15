@@ -30,7 +30,7 @@ def _gather_white_paper_tasks(root: Path) -> list[tuple[Path, Path]]:
     return tasks
 
 
-def _gather_data_paper_tasks(root: Path) -> list[tuple[Path, Path]]:
+def _gather_research_paper_tasks(root: Path) -> list[tuple[Path, Path]]:
     tasks: list[tuple[Path, Path]] = []
     final = root / "final"
     tasks.append((root / "drafts" / "paper.tex", final / "drafts" / "paper.tex"))
@@ -75,17 +75,17 @@ def package_exports(workspace_path: str) -> bool:
         return False
 
     mode = _effective_mode(route)
-    if mode not in {"white_paper", "data_paper", "hybrid"}:
+    if mode not in {"white_paper", "research_paper", "hybrid"}:
         print(f"ERROR: Unknown or missing mode: {mode!r}", file=sys.stderr)
         return False
 
     tasks: list[tuple[Path, Path]] = []
     if mode == "white_paper":
         tasks = _gather_white_paper_tasks(root)
-    elif mode == "data_paper":
-        tasks = _gather_data_paper_tasks(root)
+    elif mode == "research_paper":
+        tasks = _gather_research_paper_tasks(root)
     else:
-        tasks = _dedupe_tasks(_gather_white_paper_tasks(root) + _gather_data_paper_tasks(root))
+        tasks = _dedupe_tasks(_gather_white_paper_tasks(root) + _gather_research_paper_tasks(root))
 
     if final_root.exists():
         shutil.rmtree(final_root)
